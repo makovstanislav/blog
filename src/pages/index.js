@@ -8,20 +8,7 @@ const dummyPosts = [
 ]
 
 // markup
-const IndexPage = () => {
-  const data = useStaticQuery(graphql`
-    {
-      allMarkdownRemark(sort: {fields: fileAbsolutePath, order: DESC}) {
-        nodes {
-          id
-          frontmatter {
-            title
-          }
-        }
-      }
-    }
-  `)
-
+const IndexPage = ({ data }) => {
   return (
     <Layout>
       <div class="content">
@@ -39,5 +26,18 @@ const IndexPage = () => {
     </Layout>
   )
 }
+
+export const query = graphql`
+  {
+    allMarkdownRemark(sort: {fields: fileAbsolutePath, order: DESC}) {
+      nodes {
+        id
+        frontmatter {
+          title
+        }
+      }
+    }
+  }
+`
 
 export default IndexPage

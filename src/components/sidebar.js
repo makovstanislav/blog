@@ -5,7 +5,7 @@ import { StaticImage } from "gatsby-plugin-image"
 const Sidebar = () => {return (
   <div class="content">
     <div class="has-text-centered">
-      <h1>Hi.</h1>
+      <h1>👋 Hi.</h1>
       <figure class="image">
         <StaticImage src="../images/avatar.jpg" class="is-rounded" alt="avatar" />
       </figure>

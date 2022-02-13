@@ -3,22 +3,19 @@ import Helmet from "react-helmet"
 
 import Sidebar from "./sidebar"
 
-const columnsContainer = "columns m-5"
-const sidebarColumn = "column is-one-quarter box m-1"
-const mainColumn = "column is-three-quarters box m-1"
 
 const Layout = ({ children }) => {
-
   return (
     <>
       <Helmet>
+        <title>Anatolii's Programming Blog</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
       </Helmet>
-      <main class={columnsContainer}>
-        <div class={sidebarColumn}>
+      <main class="columns m-5">
+        <div class="column is-one-quarter box m-1">
           <Sidebar />
         </div>
-        <div class={mainColumn}>
+        <div class="column is-three-quarters box m-1">
           {children}
         </div>
       </main>
