@@ -1,11 +1,8 @@
 import * as React from "react"
-import { useStaticQuery, graphql } from "gatsby"
+import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
 
-const dummyPosts = [
-  {date: "Feb 09, 2020", title: "Hello World"}
-]
 
 // markup
 const IndexPage = ({ data }) => {
@@ -17,7 +14,7 @@ const IndexPage = ({ data }) => {
           {
             data.allMarkdownRemark.nodes.map(post => {
               return(
-                <li><span>Date &raquo;</span> {post.frontmatter.title}</li>
+                <li><span>{post.fields.date} &raquo;</span> {post.frontmatter.title}</li>
               )
             })
           }
@@ -34,6 +31,9 @@ export const query = graphql`
         id
         frontmatter {
           title
+        }
+        fields {
+          date(formatString: "MMM DD, YYYY")
         }
       }
     }
