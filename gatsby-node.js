@@ -23,10 +23,18 @@ exports.createPages = async ({ graphql, actions }) => {
 
   const result = await graphql(`
     {
-      allMarkdownRemark {
-        nodes {
-          fields {
-            slug
+      allMarkdownRemark(sort: {fields: fields___date, order: ASC}) {
+        edges {
+          node {
+            fields {
+              slug
+            }
+          }
+          next {
+            id
+          }
+          previous {
+            id
           }
         }
       }
@@ -34,12 +42,14 @@ exports.createPages = async ({ graphql, actions }) => {
   `)
   const templatePath = path.resolve(`src/templates/PostTemplate.js`)
 
-  result.data.allMarkdownRemark.nodes.forEach((node) => {
+  result.data.allMarkdownRemark.edges.forEach((edge) => {
     createPage({
-      path: `/posts/${node.fields.slug}`,
+      path: `/posts/${edge.node.fields.slug}`,
       component: templatePath,
       context: {
-        slug: node.fields.slug,
+        slug: edge.node.fields.slug,
+        previousId: edge.previous && edge.previous.id,
+        nextId: edge.next && edge.next.id,
       },
     })
   })
