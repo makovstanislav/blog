@@ -1,5 +1,5 @@
 import * as React from "react"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 
 import Layout from "../components/layout"
 
@@ -14,7 +14,7 @@ const IndexPage = ({ data }) => {
           {
             data.allMarkdownRemark.nodes.map(post => {
               return(
-                <li><span>{post.fields.date} &raquo;</span> {post.frontmatter.title}</li>
+                <li><span>{post.fields.date} &raquo;</span> <Link to={`/posts/${post.fields.slug}`}>{post.frontmatter.title}</Link></li>
               )
             })
           }
@@ -28,12 +28,12 @@ export const query = graphql`
   {
     allMarkdownRemark(sort: {fields: fileAbsolutePath, order: DESC}) {
       nodes {
-        id
         frontmatter {
           title
         }
         fields {
           date(formatString: "MMM DD, YYYY")
+          slug
         }
       }
     }
