@@ -19,6 +19,7 @@
     "@mdx-js/react": "^1.6.22",
     "bulma": "^0.9.3",
     "gatsby": "^4.7.1",
+    "gatsby-plugin-catch-links": "^4.7.0",
     "gatsby-plugin-fontawesome-css": "^1.2.0",
     "gatsby-plugin-google-tagmanager": "^4.7.0",
     "gatsby-plugin-image": "^2.7.0",
