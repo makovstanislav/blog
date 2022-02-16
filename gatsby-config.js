@@ -22,6 +22,14 @@ module.exports = {
     "gatsby-plugin-fontawesome-css",
 
     {
+      resolve: "gatsby-plugin-google-tagmanager",
+      options: {
+        id: "GTM-MGZJP4K",
+        includeInDevelopment: true,
+      },
+    },
+
+    {
       resolve: "gatsby-transformer-remark",
       options: {
         plugins: [

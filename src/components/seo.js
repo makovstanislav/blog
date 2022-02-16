@@ -14,8 +14,6 @@ const SEO = ({ title, description, image, article }) => {
     defaultDescription,
     siteUrl,
     defaultImage,
-    github,
-    linkedin,
     twitter,
   } = site.siteMetadata
 
@@ -59,8 +57,6 @@ const query = graphql`
         defaultDescription: description
         siteUrl: url
         defaultImage: image
-        github
-        linkedin
         twitter
       }
     }
