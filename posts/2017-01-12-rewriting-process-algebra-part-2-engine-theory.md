@@ -27,7 +27,7 @@ These reported events include:
 Let us have a look at how our GUI example from [Part 1](/blog/2017/01/11/rewriting-process-algebra-part-1-introduction-to-process-algebra.html) of this series would have been executed in the standard implementation:
 
 1. A hierarchy of actors (nodes) is created:
-```graphviz
+```dot
 digraph G {
     rankdir="BT";
     fontname="sans-serif";
@@ -61,7 +61,7 @@ Note that under the `*` operators, only the `button()` operands are created, but
 2. When the button `first` is pressed, `button(first)` is finishes its evaluation (execution) with success - `ε`. The corresponding actor sends this event as a message to its supervising actor, `*`, and stops itself, removing itself from the hierarchy. `*` in turn forwards the message to `+`. Both these actors have the information that `first` has successfully finished at this point.
 3. `+` acts upon this information by cancelling its second operand
 4. `*` acts upon this information by instantiating an actor corresponding to its second operand, `setText(textField, "Hello World")`, and sending a message to it, ordering it to start execution. The resulting hierarchy after this step is as follows:
-```graphviz
+```dot
 digraph G {
     rankdir="BT";
     fontname="sans-serif";
