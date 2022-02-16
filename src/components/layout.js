@@ -9,14 +9,15 @@ const Layout = ({ children }) => {
     <>
       <Helmet>
         <title>Anatolii's Programming Blog</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
       </Helmet>
-      <main class="columns m-5">
-        <div class="column is-one-quarter box m-1">
-          <Sidebar />
-        </div>
-        <div class="column is-three-quarters box m-1">
-          {children}
+      <main class="has-background-light">
+        <div class="columns is-gapless">
+          <div class="column is-one-quarter is-hidden-mobile">
+            <div class="box m-2"><Sidebar /></div>
+          </div>
+          <div class="column is-three-quarters">
+            <div class="box m-2">{children}</div>
+          </div>
         </div>
       </main>
       <footer class="footer content has-text-centered">
