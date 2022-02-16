@@ -5,6 +5,9 @@ description: Motivation for the recursion schemes based on fixed-point types and
 keywords: [scala,programming,functional programming,category theory,recursion schemes,matryoshka,catamorphism,recursion]
 example: matryoshka-intro
 ---
+```toc
+```
+<br/>
 
 > Recursion is the GOTO of functional programming - Erik Meijer[^1]
 
