@@ -7,8 +7,8 @@ import Layout from "../components/layout"
 // markup
 const IndexPage = ({ data }) =>
   <Layout>
-    <div class="content">
-      <h2>📝 Blog Posts</h2>
+    <div>
+      <h1 class="title">📝 Blog Posts</h1>
       <ul id="blog-posts" class="posts">
         {
           data.allMarkdownRemark.nodes.map(post => {
