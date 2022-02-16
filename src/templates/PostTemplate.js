@@ -2,6 +2,7 @@ import * as React from "react"
 import { graphql, Link } from "gatsby"
 
 import Layout from "../components/layout"
+import Seo from "../components/seo"
 
 
 const PostTemplate = ({ data }) => {
@@ -15,6 +16,7 @@ const PostTemplate = ({ data }) => {
 
   return(
     <Layout>
+      <Seo title={post.frontmatter.title} description={post.frontmatter.description} article="true" />
       <div class="content p-3">
         <div class="level">
           <div class="level-left">
@@ -70,6 +72,7 @@ export const query = graphql`
     markdownRemark(fields: {slug: {eq: $slug}}) {
       frontmatter {
         title
+        description
       }
       fields {
         date(formatString: "MMM DD, YYYY")

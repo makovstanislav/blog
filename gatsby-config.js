@@ -2,9 +2,14 @@ module.exports = {
   siteMetadata: {
     title: `Anatolii's Programming Blog`,
     siteUrl: `https://www.yourdomain.tld`,
-    personal: {
-
-    }
+    titleTemplate: "%s · Anatolii's Programming Blog",
+    description:
+      "I'm Anatolii, Scala programmer, Compiler Engineer at LAMP/EPFL supporting the Scala 3 effort.",
+    url: "https://www.akmetiuk.com", // No trailing slash allowed!
+    image: "/images/avatar.jpg", // Path to the image placed in the 'static' folder, in the project's root directory.
+    github: "anatoliykmetyuk",
+    linkedin: "akmetiuk",
+    twitter: "akmetiuk",
   },
   plugins: [
     "gatsby-plugin-react-helmet",
