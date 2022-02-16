@@ -17,6 +17,14 @@ module.exports = {
       resolve: "gatsby-transformer-remark",
       options: {
         plugins: [
+          {
+            resolve: `gatsby-remark-table-of-contents`,
+            options: {
+              tight: true,
+              fromHeading: 1,
+            }
+          },
+          `gatsby-remark-autolink-headers`,  // Must go before prismjs to avoid https://github.com/gatsbyjs/gatsby/issues/5764 – see docs
           `gatsby-remark-prismjs`,
         ]
       }
