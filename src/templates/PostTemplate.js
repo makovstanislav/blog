@@ -28,18 +28,30 @@ const PostTemplate = ({ data }) => {
         <h1><b>{post.frontmatter.title}</b></h1>
         <article dangerouslySetInnerHTML={{__html: post.html}}/>
 
-        <div class="level">
-          <div class="level-left">
+        <div class="box mt-3 has-background-warning-light">
+          <div class="level">
             <div class="level-item">
-              {previous && (
-                <Link to={`/posts/${previous.fields.slug}`}>⬅️ {formatNavTitle(previous.frontmatter.title)}</Link>
-              )}
+              <div class="s9-widget-wrapper" />
             </div>
           </div>
-          <div class="level-right">
+
+          <div class="level m-2">
+            <div class="level-item">
+              {previous && (
+                <Link to={`/posts/${previous.fields.slug}`}>
+                  <button class="button is-link-light">
+                    ⬅️ {formatNavTitle(previous.frontmatter.title)}
+                  </button>
+                </Link>
+              )}
+            </div>
             <div class="level-item">
               {next && (
-                <Link to={`/posts/${next.fields.slug}`}>{formatNavTitle(next.frontmatter.title)} ➡️</Link>
+                <Link to={`/posts/${next.fields.slug}`}>
+                  <button class="button is-link-light">
+                    {formatNavTitle(next.frontmatter.title)} ➡️
+                  </button>
+                </Link>
               )}
             </div>
           </div>

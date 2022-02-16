@@ -33,6 +33,14 @@ module.exports = {
         ]
       }
     },
+    {
+      resolve: "gatsby-plugin-social9-socialshare",
+      options: {
+        content:  "8d8a4787d537487d991c279d63daa2fa",
+        async: true,
+        defer: true
+      }
+    },
 
     {
       resolve: "gatsby-source-filesystem",

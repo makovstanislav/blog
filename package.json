@@ -25,6 +25,7 @@
     "gatsby-plugin-sass": "^5.7.0",
     "gatsby-plugin-sharp": "^4.7.0",
     "gatsby-plugin-sitemap": "^5.7.0",
+    "gatsby-plugin-social9-socialshare": "^1.0.6",
     "gatsby-remark-autolink-headers": "^5.7.0",
     "gatsby-remark-graphviz": "^4.7.0",
     "gatsby-remark-plantuml-lite": "^0.1.2",
