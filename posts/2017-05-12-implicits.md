@@ -3,6 +3,8 @@ title: Implicits mechanism in Scala
 keywords: [implicit,scala]
 example: implicits
 ---
+```toc
+```
 
 # Motivation
 There are three things Scala implicits mechanism is good for:
@@ -29,7 +31,31 @@ Consider a web application in Scala. Its job is to maintain a database of users 
 ## Architecture
 A natural way to model users is to define a `User` case class. Next, we need a way to perform read/write operations on a database of users. Finally, within our web framework we want to register an HTTP request handler to expose the JSON API to the users.
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="Setting"}
+```scala
+type Json = Map[String, String]
+type ApiHandler = PartialFunction[String, Json]
+
+val apiPath = "/api/user"
+
+def serve(h: ApiHandler): Unit = println(h(s"$apiPath/42"))
+
+case class User(id: Int, username: String)
+
+trait UserDB {
+  def write(u: User): Unit
+  def read (id: Int): User
+}
+
+abstract class DummyUserDB(dbName: String) extends UserDB {
+  private var persistence: Map[Int, User] = Map()
+
+  def write(u: User): Unit = {
+    persistence = persistence.updated(u.id, u)
+    println(s"Wrote to $dbName: $u")
+  }
+  def read(id: Int): User = persistence(id)
+}
+object UserDBSql extends DummyUserDB("SQL")
 ```
 
 For simplicity, we do not use any real database or web framework here, we merely mock their functionality:
@@ -42,7 +68,20 @@ For simplicity, we do not use any real database or web framework here, we merely
 ## Execution
 With that architecture, in order to expose the API, we need to register a handler for the HTTP path of that API within the web framework using the `serve` method.
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="E1_1_Force_Conversion"}
+```scala
+def userToJson(u: User): Json =
+  Map("id" -> u.id.toString, "username" -> u.username)
+
+val u = User(42, "Bob")
+UserDBSql.write(u)
+
+val usersApiPath = s"$apiPath/(\\d+)".r
+val handler: ApiHandler = {
+  case usersApiPath(id) =>
+    val user = UserDBSql.read(id.toInt)
+    userToJson(user)
+}
+serve(handler)
 ```
 
 The above code first writes a sample user to the database. Then it defines a HTTP request handler for the JSON API to the users. We use regex to define a RESTful path of the form `"/api/user/${userId}"`. Inside the handler, we read the user with the requested id from the SQL database, serialize it to JSON and return.
@@ -53,12 +92,19 @@ Notice how we convert the `user` object to `Json` after reading it. This is a te
 
 It turns out Scala compiler can also see that and can wrap the `user` into the conversion method `userToJson` automatically for us. We can instruct it to do so by prefixing the `def userToJson` with the `implicit` keyword:
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="userToJson"}
+```scala
+implicit def userToJson(u: User): Json =
+  Map("id" -> u.id.toString, "username" -> u.username)
 ```
 
 Now we can write the handler as:
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="E1_2_Conversion"}
+```scala
+val handler: ApiHandler = {  // PartialFunction[String, Json]
+  case usersApiPath(id) =>
+    val user = UserDBSql.read(id.toInt)
+    user // User; User => Json
+}
 ```
 
 This `implicit def` is an *implicit conversion*. It behaves almost exactly the same way the original `def` does. For instance, you can call it explicitly as an ordinary `def`. The only difference is that whenever the compiler encounters `User` where `Json` is expected, it now has our permission to automatically use that method to convert one to another.
@@ -88,12 +134,29 @@ This way, whenever we call the method `f` on an object of type `T` that does not
 ## Example
 Let us try to augment the `User` class with a `write()` method and the `String` with `readUser()` method. This way, we can call `u.write()` instead of `UserDBSql.write(u)` and `id.toInt.readUser()` instead of `UserDBSql.read(id.toInt)`. Notice how the read operation on an `Int` can be ambiguous: we can have more models than just `User` that we might want to read this way. So we should use non-ambiguous name for the method.
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="E2_Wrapper_conversions"}
+```scala
+class RichUser(u: User) {
+  def write() = UserDBSql.write(u)
+}
+implicit def augmentUser(u: User): RichUser = new RichUser(u)
+
+class RichId(x: Int) {
+  def readUser(): User = UserDBSql.read(x)
+}
+implicit def augmentInt(x: Int): RichId = new RichId(x)
 ```
 
 After we have these conversions in scope, we can rewrite our example as follows:
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="E2_Wrapper_example"}
+```scala
+val u = User(42, "Bob")
+u.write()
+
+val usersApiPath = s"$apiPath/(\\d+)".r
+val handler: ApiHandler = {
+  case usersApiPath(id) => id.toInt.readUser()
+}
+serve(handler)
 ```
 
 The compiler will encounter the `u.write()` and `id.toInt.readUser()`, but will not find the `write()` and `readUser()` methods in `User` and `Int` correspondingly. It will then look at the types of the objects the methods are called on and will try to find the conversions from these types to the ones that have the required methods. In our case, these objects will be converted to the rich wrappers we have defined.
@@ -109,24 +172,57 @@ This can be used to declare dependencies for method calls or object construction
 ## Example
 In our example, the rich wrappers depend on the database access object. Let us see what happens if we want to support multiple database backends - for instance, a MongoDB backend:
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="MongoDB"}
+```scala
+object UserDBMongo extends DummyUserDB("MongoDB")
 ```
 
 Then, whenever we want to change the backend we use, we will need to change every occurrence of it in the code. That's not very DRY, so normally you would assign the backend you want to use to a variable and reference it every time you need the backend:
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="E3_1_Force_Context_conversions"}
+```scala
+val db = UserDBMongo
+
+class RichUser(u: User) {
+  def write() = db.write(u)
+}
+implicit def augmentUser(u: User): RichUser = new RichUser(u)
+
+class RichId(x: Int) {
+  def readUser(): User = db.read(x)
+}
+implicit def augmentInt(x: Int): RichId = new RichId(x)
 ```
 
 This introduces a dependency on a global variable, however. `RichUser`, `RichId` and any other code that needs a backend must know exactly where this variable is located. This can greatly reduce flexibility in case of large code bases: every time you work with the backend, you are forced to think globally, and this reduces focus on the current task. Modular, purely local solutions where you need to think only about the local piece of code you are currently writing, are preferred. Hence the need for a dependency injection mechanism.
 
 With the implicit arguments, we can perform the dependency injection as follows:
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="E3_Context_conversions"}
+```scala
+class RichUser(u: User, db: UserDB) {
+  def write() = db.write(u)
+}
+implicit def augmentUser(u: User)(implicit db: UserDB): RichUser =
+  new RichUser(u, db)
+
+class RichId(x: Int, db: UserDB) {
+  def readUser(): User = db.read(x)
+}
+implicit def augmentInt(x: Int)(implicit db: UserDB): RichId =
+  new RichId(x, db)
 ```
 
 Notice how the `write()` and `readUser()` methods no longer depend on anything outside the scope of their parent classes. Next, notice how the `db` backend is passed as an implicit argument to the implicit conversion methods. When the compiler needs to call these conversions, it will look up these implicit arguments and inject them into the original `implicit def`s:
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="E3_Context_example"}
+```scala
+implicit val db = UserDBMongo
+
+val u = User(42, "Bob")
+u.write()
+
+val usersApiPath = s"$apiPath/(\\d+)".r
+val handler: ApiHandler = {
+  case usersApiPath(id) => id.toInt.readUser()
+}
+serve(handler)
 ```
 
 We still have the backend stored in one variable, but this time no code that requires it references it directly. Instead, the implicits mechanism acts as a dependency injection framework. All we need to do before calling a method with implicit dependencies is to place these dependencies at the implicit scope before the call is performed.
@@ -134,7 +230,16 @@ We still have the backend stored in one variable, but this time no code that req
 # `implicit class` pattern
 The rich wrapper pattern discussed above is so commonly used that there is a language level support for it in Scala. It is possible to declare an `implicit class` that has exactly one constructor parameter (not counting a possible implicit parameter group). This will declare a class as usual, but also an implicit conversion from its constructor's argument type to that class:
 
-```{.scala include="code/implicits/src/main/scala/implicitconversions/Main.scala" snippet="E4_WrapperShorthand_conversions"}
+```scala
+implicit class RichUser(u: User)(implicit db: UserDB) {
+  def write() = db.write(u)
+}
+// (User ^ UserDB) => RichUser
+
+implicit class RichId(x: Int)(implicit db: UserDB) {
+  def readUser(): User = db.read(x)
+}
+// (Int ^ UserDB) => RichId
 ```
 
 Notice how class constructors can also have an implicit argument group.

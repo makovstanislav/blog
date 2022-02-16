@@ -1,9 +1,12 @@
 ---
-title: Dissecting Shapeless&#58; Poly
+title: "Dissecting Shapeless: Poly"
 description: An overview of the architecture of Shapeless' Polymorphic functions (Poly).
 keywords: [scala,shapeless,functional programming,category theory,polymorphic function,poly,software architecture]
-example: shapeless-poly
 ---
+```toc
+```
+<br/>
+
 In this article, I would like to analyse the architecture of Shapeless' polymorphic functions and their inner workings.
 
 If you are new to Shapeless, you may want to read the first article of the series: [Learning Shapeless: HLists](/blog/2016/09/30/learning-shapeless-hlists.html).
@@ -18,7 +21,30 @@ The article describes the architecture of Shapeless 2.3.2, which is the latest v
 # Core principles
 To better see the core ideas behind Shapeless' `Poly`s, let us try to implement them *ad hoc*, without any imports from Shapeless.
 
-```{.scala include=code/shapeless-poly/src/main/scala/shapelesspoly/AdHocPoly.scala snippet=body}
+```scala
+trait Case[F, In] {
+  type Out
+  def apply(x: In): Out
+}
+
+trait Poly {
+  def apply[T](x: T)(implicit cse: Case[this.type, T]): cse.Out = cse(x)
+}
+
+object f extends Poly {
+  implicit val intCase = new Case[f.type, Int] {
+    type Out = String
+    def apply(x: Int) = "It works! " * x
+  }
+
+  implicit val stringCase = new Case[f.type, String] {
+    type Out = Int
+    def apply(x: String) = x.length
+  }
+}
+
+println(f(3))
+println(f("Foo"))
 ```
 
 A polymorphic function has the ability to be called with arguments of different types, possibly also returning values of different types.
@@ -63,7 +89,7 @@ Now let us look at the files that are of interest to us, referring for simplicit
 - [`build.sbt`](https://github.com/milessabin/shapeless/blob/master/build.sbt) and [`project/Boilerplate.scala`](https://github.com/milessabin/shapeless/blob/master/project/Boilerplate.scala) - These two define how the synthetic sources are generated. `Boilerplate.scala` defines the templates and the generation logic, and `build.sbt` references this file. Although they are not directly relevant to the polymorphic functions in Shapeless, they are required for mechanics behind the synthetic source generation.
 
 ## Entities
-```{.plantuml width=100%}
+```plantuml
 PolyApply <|-- Poly : extends
 "Case[P, L <: HList]" <.. PolyApply : implicit
 "Case[P, L <: HList]" <.. Poly : implicit
@@ -149,7 +175,17 @@ Finally, one more trait worth attention is `~>`, which is located in `core/poly.
 # Usage
 Let us see how our *ad hoc* example from the "Core Principles" paragraph will look like in Shapeless:
 
-```{.scala include=code/shapeless-poly/src/main/scala/shapelesspoly/ShapelessPoly.scala snippet=body}
+```scala
+import shapeless._
+import poly._
+
+object f extends Poly1 {
+  implicit val intCase    = at[Int   ] { x => "It Works! " * x}
+  implicit val stringCase = at[String] { x => x.length        }
+}
+
+println(f(3))
+println(f("Foo"))
 ```
 
 Since we want a function defined on one argument, we extend `Poly1` to bring into the scope the convenience method `at` to build the corresponding `Case`s. The two `Case`s are for `Int` and `String` input arguments. When we call `at[T]`, we create a `CaseBuilder[T]`. When we call `apply(T => Result)` on it, a `Case[this.type, T]` is produced.

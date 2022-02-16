@@ -1,17 +1,21 @@
 ---
 layout: post
-title: Rewriting Process Algebra, Part 1&#58; Introduction to Process Algebra
+title: "Rewriting Process Algebra, Part 1: Introduction to Process Algebra"
 description: A rewriting-based process algebra implementation in Scala.
 keywords: [process algebra,scala,subscript,free object,functional programming,algebra of communicating processes,acp,category theory,concurrent programming,concurrency,reactive programming]
 ---
+```toc
+```
+<br/>
+
 This is the first part of a progress report on my attempt to model a process algebra as an expression rewriting machine. The process algebra in question is [SubScript](http://subscript-lang.org/from-acp-and-scala-to-subscript/)[^1][^2], which is an extension of [ACP](https://en.wikipedia.org/wiki/Algebra_of_Communicating_Processes). It is recommended to familiarize yourself with ACP and [process algebras](https://en.wikipedia.org/wiki/Process_calculus) before reading this article further.
 
 This part covers the idea of process algebra and why it can be useful. It is a bird's eye glance of how a process algebra engine can help you in writing programs. You can have a look at the work in progress at the [FreeACP](https://github.com/anatoliykmetyuk/free-acp) repository.
 
 Other parts of this report:
 
-- [Rewriting Process Algebra, Part 2: Engine Theory](/blog/2017/01/12/rewriting-process-algebra-part-2-engine-theory.html)
-- [Rewriting Process Algebra, Part 3: FreeACP Implementation](/blog/2017/01/13/rewriting-process-algebra-part-3-freeacp-implementation.html)
+- [Rewriting Process Algebra, Part 2: Engine Theory](/posts/2017-01-12-rewriting-process-algebra-part-2-engine-theory.html)
+- [Rewriting Process Algebra, Part 3: FreeACP Implementation](/posts/2017-01-13-rewriting-process-algebra-part-3-freeacp-implementation.html)
 
 **Disclaimer:** Note that the theory and implementation in this series is a work in progress. Although their aim is to implement the features of SubScript in the long run, in its current state this work is far from its goal. Hence, the theory used in this series should be considered only as a language-independent foundation to the implementation of FreeACP to date. The series should not be considered a tutorial on ACP or any other process algebra. The terminology used in the series has a meaning as defined in the article and may not comply to that of ACP or any other process algebra.
 

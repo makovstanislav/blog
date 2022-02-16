@@ -1,6 +1,8 @@
 ---
 title: Models for Life
 ---
+```toc
+```
 
 # Planning for the Future
 Our mind continuously builds models for the future. This way, you know exactly what you will be doing tomorrow morning. And you know whether you have enough money to make it to the end of the month. If you don't, you know it, and you start to feel uneasy.

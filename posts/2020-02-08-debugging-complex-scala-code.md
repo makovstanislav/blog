@@ -2,6 +2,9 @@
 title: Debugging Complex Scala Code&#58; Tried and True Approaches
 description: The tools and approaches I've been using for months that save me a lot of time when debugging the Dotty codebase.
 ---
+```toc
+```
+<br/>
 
 11 months ago, I wrote an article about how I was fixing a Dotty bug. Back then, working under the processes I used, I produced a 60 pages long PDF document over the course of 10 days which documented the bug hunting workflow. The premise of the article was that if you adopt the right processes, the efficiency of the task in question increases dramatically. Back then, logging each step in a human-readable form was such a process for me.
 
@@ -46,7 +49,7 @@ The fact that each flag can be on its own line means you can easily comment them
 ## Better Stack Trace
 Consider the following:
 
-<a href="/assets/visuals/debugging-complex-scala-code/stack-ugly.png"><img src="/assets/visuals/debugging-complex-scala-code/stack-ugly.png" width="100%" target="_blank"/></a>
+<a href="/post_assets/2020-02-08-debugging-complex-scala-code/stack-ugly.png"><img src="/post_assets/2020-02-08-debugging-complex-scala-code/stack-ugly.png" width="100%" target="_blank"/></a>
 
 This is a stack trace from somewhere inside Dotty. They are your starting points of investigation in the issues that involve crashes. Alternatively you may deliberately cause them to see from which place a method was called.
 
@@ -54,7 +57,7 @@ One problem with the stack on the picture is that it is hard to see the method n
 
 Now consider the following stack trace:
 
-<a href="/assets/visuals/debugging-complex-scala-code/stack-pretty.png"><img src="/assets/visuals/debugging-complex-scala-code/stack-pretty.png" width="100%" target="_blank"/></a>
+<a href="/post_assets/2020-02-08-debugging-complex-scala-code/stack-pretty.png"><img src="/post_assets/2020-02-08-debugging-complex-scala-code/stack-pretty.png" width="100%" target="_blank"/></a>
 
 The method names are highlighted, so you can clearly see them. This is just about as important for stack traces as code highlighting for source code. The real game changer is that the source file paths are resolved. You can cmd+click them from iTerm to jump to the frame immediately. This saves a few seconds each frame and makes it much easier to explore the stack.
 
@@ -65,7 +68,7 @@ We think in terms of graphs: entities and relationships between them. In program
 
 Fortunately, there is a tool to help in such a thinking process – the concept map:
 
-<a href="/assets/visuals/debugging-complex-scala-code/scapple.png"><img src="/assets/visuals/debugging-complex-scala-code/scapple.png" width="100%" target="_blank"/></a>
+<a href="/post_assets/2020-02-08-debugging-complex-scala-code/scapple.png"><img src="/post_assets/2020-02-08-debugging-complex-scala-code/scapple.png" width="100%" target="_blank"/></a>
 
 The software above is [Scapple](https://www.literatureandlatte.com/scapple/overview), the only one I found that has minimal distractions and supports rich text formatting (will become clear why it is crucial below).
 

@@ -1,5 +1,5 @@
 ---
-title: Introductory Functional Programming Course&#58; Learning the Intuitive Way
+title: "Introductory Functional Programming Course: Learning the Intuitive Way"
 keywords: [scala,cats,functional programming,course,typelevel]
 ---
 

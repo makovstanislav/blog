@@ -4,6 +4,10 @@ description: A pattern to convert to your effect type from side effects and othe
 keywords: [scala,programming,functional programming,category theory,effect type,side effect,effect,typelevel,cats,monad,monad transformer]
 example: effect-extensions
 ---
+```toc
+```
+<br/>
+
 When programming in a purely functional style, we aim to reify side effects into data structures called *effect types*. An effect type you are using should be the same throughout the entire application so that different parts of the application are composable.
 
 When having multiple side effects and a single effect type to express them, the problem arises on how to convert the former to the latter conveniently. Also, when working with functional libraries, we need to translate from their effect systems – *foreign effect systems* – to the one used by our application. We need such translations because purely functional libraries – e.g. [Typelevel](https://typelevel.org/) stack – employ effect systems that are usually different from the one used by our application.
@@ -16,7 +20,8 @@ Let us look at a problem of request handling by a web server. We need to define 
 ## Effect System for the Example
 For web servers, non-blocking execution and error reporting are essential. Therefore, we are using the following type as an effect type:
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/package.scala" snippet="Ef"}
+```scala
+type Ef[A] = EitherT[IO, String, A]
 ```
 
 We are using the `EitherT` type to combine the effect types `IO` and `Either`. `Either` is implied by `EitherT` which is a monad transformer for `Either`. `IO` is responsible for asynchrony (hence non-blocking computations), and `Either` – for error reporting. In `Either`, we represent errors as `String`s under `Left`.
@@ -53,12 +58,23 @@ Operating systems distinguish between different file types using extensions in t
 
 Effect Extensions pattern applies the formalism of file extensions to translate different side effects and foreign effect types to the effect type of the application we are writing. Here is how the request handler looks under the effect extensions pattern.
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/Main.scala" snippet="requestHandler"}
+```scala
+def requestHandler(requestBody: String): Ef[Unit] =
+  for {
+    bodyJson <- parse(requestBody)                   .etr
+    _        <- println(s"Parsed body: $bodyJson")   .sus
+    fileName <- bodyJson.hcursor.get[String]("file") .etr
+    fileBody <- File(fileName).contentAsString       .exn
+    _        <- println(s"Parsed file: $fileBody")   .sus
+  } yield ()
 ```
 
 We are using the following imports here:
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/Main.scala" snippet="imports"}
+```scala
+import cats._, cats.implicits._, cats.data._, cats.effect._
+import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
+import better.files._, better.files.File._, java.io.{ File => JFile }
 ```
 
 In the `requestHandler` body, the side-effecting expressions and expressions coming from third-party libraries imported above have the following types:
@@ -85,12 +101,29 @@ How do we implement the effect extensions as a part of our effect system?
 ## Strategy
 We are using the Rich Wrapper pattern to inject effect extensions into the expression types we want to use these extensions on.
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/package.scala" snippet="RichWrappers" ignore-other-snippets="true"}
+```scala
+implicit def showExn: Show[Throwable] = Show.show[Throwable] { e =>
+  s"${e.getMessage}\n${e.getStackTrace.mkString("\n")}"
+}
+
+implicit class RichEither[E: Show, A](x: Either[E, A]) {
+  def etr: Ef[A] = EitherT.fromEither[IO](x).leftMap(_.show)
+}
+
+implicit class RichDelayed[A](x: => A) {
+  def sus: Ef[A] = EitherT.right[String](IO { x })
+  def exn: Ef[A] = Try(x).toEither.etr
+}
 ```
 
 We also define the capability to evaluate the `Ef` type synchronously.
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/package.scala" snippet="RichEf"}
+```scala
+implicit class RichEf[A](ef: Ef[A]) {
+  def run: A = ef.value.unsafeRunSync().bimap(
+    err => throw new RuntimeException(s"Error Happened:\n$err")
+  , res => res).merge
+}
 ```
 
 ## Entire Pattern
@@ -101,41 +134,70 @@ The Effect Extensions pattern defines the following two components:
 
 We define the pattern in the package object of the application. Here is how it looks in its entirety:
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/package.scala" ignore-other-snippets="true"}
+```scala
+import scala.util.Try
+import cats._, cats.implicits._, cats.data._, cats.effect._
+
+package object effectextensions {
+  type Ef[A] = EitherT[IO, String, A]
+
+  implicit def showExn: Show[Throwable] = Show.show[Throwable] { e =>
+    s"${e.getMessage}\n${e.getStackTrace.mkString("\n")}"
+  }
+
+  implicit class RichEither[E: Show, A](x: Either[E, A]) {
+    def etr: Ef[A] = EitherT.fromEither[IO](x).leftMap(_.show)
+  }
+
+  implicit class RichDelayed[A](x: => A) {
+    def sus: Ef[A] = EitherT.right[String](IO { x })
+    def exn: Ef[A] = Try(x).toEither.etr
+  }
+
+  implicit class RichEf[A](ef: Ef[A]) {
+    def run: A = ef.value.unsafeRunSync().bimap(
+      err => throw new RuntimeException(s"Error Happened:\n$err")
+    , res => res).merge
+  }
+}
 ```
 
 # Running the Example
 ## Successful Run
 Let us assume that we have a file named `foo.txt` in the root of the project with the content of `"Hello World!"`. We can achieve a successful execution of the handler as follows.
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/Main.scala" snippet="Successful"}
+```scala
+requestHandler("""{"file": "foo.txt"}""") .run
 ```
 
 The output is as follows:
 
-<a href="/assets/visuals/effect-extensions/successful-run.png"><img src="/assets/visuals/effect-extensions/successful-run.png" width="100%" target="_blank"/></a>
+<a href="/post_assets/2018-08-18-effect-extensions/successful-run.png"><img src="/post_assets/2018-08-18-effect-extensions/successful-run.png" width="100%" target="_blank"/></a>
 
 ## Failure: Circe
 We can feed a malformed JSON string to the handler to simulate a failure of the body parsing stage:
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/Main.scala" snippet="CirceParserFailed"}
+```scala
+requestHandler("""{"file": "foo.txt}""") .run
 ```
-<a href="/assets/visuals/effect-extensions/circe-parser-failure.png"><img src="/assets/visuals/effect-extensions/circe-parser-failure.png" width="100%" target="_blank"/></a>
+<a href="/post_assets/2018-08-18-effect-extensions/circe-parser-failure.png"><img src="/post_assets/2018-08-18-effect-extensions/circe-parser-failure.png" width="100%" target="_blank"/></a>
 
 We can also have a correctly formatted JSON which does not have the `file` key the handler needs:
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/Main.scala" snippet="CirceKeyFailed"}
+```scala
+requestHandler("""{"stuff": "foo.txt"}""") .run
 ```
 
-<a href="/assets/visuals/effect-extensions/circe-key-failed.png"><img src="/assets/visuals/effect-extensions/circe-key-failed.png" width="100%" target="_blank"/></a>
+<a href="/post_assets/2018-08-18-effect-extensions/circe-key-failed.png"><img src="/post_assets/2018-08-18-effect-extensions/circe-key-failed.png" width="100%" target="_blank"/></a>
 
 ## Failure: File Input
 Finally, we can simulate the failure to read a file by providing a name of a file that does not exist.
 
-```{.scala include="code/effect-extensions/src/main/scala/effectextensions/Main.scala" snippet="FileFailed"}
+```scala
+requestHandler("""{"file": "stuff"}""") .run
 ```
 
-<a href="/assets/visuals/effect-extensions/file-failure.png"><img src="/assets/visuals/effect-extensions/file-failure.png" width="100%" target="_blank"/></a>
+<a href="/post_assets/2018-08-18-effect-extensions/file-failure.png"><img src="/post_assets/2018-08-18-effect-extensions/file-failure.png" width="100%" target="_blank"/></a>
 
 # Previous Work
 In my previous projects, I used the pattern without rich wrappers as follows:

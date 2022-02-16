@@ -80,7 +80,7 @@ This way, one can refer to the desired line of the tracing output by its hash an
 # The Tracking of the Debugging Process
 I tried out one way to capture the deltas last week. I have a spreadsheet like this:
 
-<a href="/assets/visuals/2020-02-08-debugging-domain/delta-tracking.png"><img src="/assets/visuals/2020-02-08-debugging-domain/delta-tracking.png" width="100%" target="_blank"/></a>
+<a href="/post_assets/2020-02-09-dotty-causal-chains/delta-tracking.png"><img src="/post_assets/2020-02-09-dotty-causal-chains/delta-tracking.png" width="100%" target="_blank"/></a>
 
 The columns are as follows:
 

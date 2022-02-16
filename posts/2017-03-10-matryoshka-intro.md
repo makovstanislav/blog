@@ -24,7 +24,11 @@ But first, let us set the foundation by doing all of the above examples in code.
 ## Natural Numbers
 Here is how an implementation of natural numbers might look like:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C1NonDry.scala" snippet="NatDef"}
+```scala
+// Nat
+sealed trait Nat
+case class   Succ(previous: Nat) extends Nat
+case object  Zero                extends Nat
 ```
 
 And here is a visualization of the number 3 represented this way:
@@ -53,13 +57,25 @@ This would correspond to `Succ(Succ(Succ(Zero)))`. Note the recursive nature of 
 
 Now, let us see how to evaluate a natural number to an `Int`. In order to do this for an arbitrary `Succ(x)`, we need to evaluate `x` and add 1 to the result. `Zero` should evaluate to 0:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C1NonDry.scala" snippet="NatEx"}
+```scala
+// Nat to Int
+def natToInt(n: Nat): Int = n match {
+  case Succ(x) => 1 + natToInt(x)
+  case Zero    => 0
+}
+val nat = Succ(Succ(Succ(Zero)))
+val natRes: Int = natToInt(nat)
+println(natRes)  // 3
 ```
 
 ## Lists
 Now let us see how to implement a list as a recursive structure:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C1NonDry.scala" snippet="ListDef"}
+```scala
+// List
+sealed trait IntList
+case class   Cons(head: Int, tail: IntList) extends IntList
+case object  Empty                          extends IntList
 ```
 
 A list is either an empty list or a recursive structure that has a `head` element and a `tail` - a sublist representing all the elements following the `head`. For simplicity, we only consider lists of `Int`.
@@ -93,13 +109,26 @@ digraph G { label=" Structure " rankdir=TB newrank=true
 
 In order to find the sum of all the elements in a list, we should add its `head` to the sum of all the elements of its `tail`. If the list is `Empty`, the result of the summation is 0:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C1NonDry.scala" snippet="ListEx"}
+```scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C1NonDry.scala" snippet="ListEx"}
+// Sum a list of ints
+def sumList(l: IntList): Int = l match {
+  case Cons(head, tail) => head + sumList(tail)
+  case Empty            => 0
+}
+val lst = Cons(1, Cons(2, Cons(3, Empty)))
+val listRes: Int = sumList(lst)
+println(listRes)  // 6
 ```
 
 ## Expressions
 Finally, this is a definition of a tree aiming to represent mathematical expression:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C1NonDry.scala" snippet="ExprDef"}
+```scala
+// Expr
+sealed trait Expr
+case class   Add (expr1  : Expr, expr2: Expr) extends Expr
+case class   Mult(expr1  : Expr, expr2: Expr) extends Expr
+case class   Num (literal: Int              ) extends Expr
 ```
 
 We have two node types for the summation and the multiplication, and one leaf type for the numbers.
@@ -134,7 +163,16 @@ digraph G { label=" Structure " rankdir=TB newrank=true
 
 How do we evaluate it? If it is a node representing a mathematical operation, first we need to evaluate its children and then do an operation represented by this node. If it is a leaf - a number - it just evaluates that number:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C1NonDry.scala" snippet="ExprEx"}
+```scala
+// Evaluate an expression
+def eval(e: Expr): Int = e match {
+  case Add (x1, x2) => eval(x1) + eval(x2)
+  case Mult(x1, x2) => eval(x1) * eval(x2)
+  case Num (x)      => x
+}
+val expr = Add(Mult(Num(2), Num(3)), Num(3))
+val exprRes: Int = eval(expr)
+println(exprRes)  // 9
 ```
 
 # Generalisation
@@ -226,19 +264,71 @@ In all our data structures, we need to specify the type of the substructures as 
 
 The new definitions can go as follows:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C2Generalisation.scala" snippet="Defs"}
+```scala
+// Nat
+sealed trait Nat [+A]
+case class   Succ[ A](previous: A) extends Nat[A      ]
+case object  Zero                  extends Nat[Nothing]
+
+// List
+sealed trait IntList[+A]
+case class   Cons   [ A](head: Int, tail: A) extends IntList[A]
+case object  Empty extends IntList[Nothing]
+
+// Expr
+sealed trait Expr[+A]
+case class   Add [ A](expr1  : A, expr2: A) extends Expr[A      ]
+case class   Mult[ A](expr1  : A, expr2: A) extends Expr[A      ]
+case class   Num     (literal: Int        ) extends Expr[Nothing]
 ```
 
 ## Functors
 If we want to use `map` on these data structures, they need functor instances. The definitions below are straightforward (do not forget to `import scalaz._, Scalaz._`, which is needed to bring functors in scope):
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C2Generalisation.scala" snippet="Functors"}
+```scala
+// Functors
+implicit val natFunct: Functor[Nat] = new Functor[Nat] {
+  def map[A, B](fa: Nat[A])(f: A => B): Nat[B] = fa match {
+    case Succ(x) => Succ(f(x))
+    case Zero    => Zero
+  }
+}
+
+implicit val intListFunct: Functor[IntList] = new Functor[IntList] {
+  def map[A, B](fa: IntList[A])(f: A => B): IntList[B] = fa match {
+    case Cons(head, tail) => Cons(head, f(tail))
+    case Empty            => Empty
+  }
+}
+
+implicit val exprFunct: Functor[Expr] = new Functor[Expr] {
+  def map[A, B](fa: Expr[A])(f: A => B): Expr[B] = fa match {
+    case     Add (x1, x2) => Add (f(x1), f(x2))
+    case     Mult(x1, x2) => Mult(f(x1), f(x2))
+    case x @ Num (_     ) => x
+  }
+}
 ```
 
 ## Catamorphism: first attempt
 As discussed above, all we need to collapse a recursive structure is to map its substructures by the collapse function and then evaluate the resulting structure via an algebra. This recursion scheme is called a *catamorphism*[^2]. Let us try to define it:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C2Generalisation.scala" snippet="CataWrong"}
+```scala
+// Catamorphism draft
+// WARNING: DOES NOT COMPILE
+// def cata[F[_]: Functor, T, A](structure: F[T])(algebra: F[A] => A): A =
+//   algebra( structure.map(cata(_)(algebra)) )
+// end snippet CataWrong
+
+// start snippet Fix
+// Fixed point type
+case class Fix[F[_]](unfix: F[Fix[F]])
+// end snippet Fix
+
+// start snippet CataRight
+// Catamorphism
+def cata[F[_]: Functor, A](structure: Fix[F])(algebra: F[A] => A): A =
+  algebra(structure.unfix.map(cata(_)(algebra)))
 ```
 
 There is one problem with this code, however. In a recursive structure, `T` is supposed to be of the same type as `F[T]` by definition. Or else we will not be able to map it by `cata` as above, since `cata` will need a `Functor[T]`. In other words, `F[T] == T`. If so, we should also be able to write `structure: T` instead of `structure: F[T]` in the signature. Obviously, we can not have that in Scala, so what do we do?
@@ -264,7 +354,9 @@ It is possible to think of a workaround, though. In our `cata` definition above,
 
 We can emulate the fixed-point type computation as in the theory above as follows:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C2Generalisation.scala" snippet="Fix"}
+```scala
+// Fixed point type
+case class Fix[F[_]](unfix: F[Fix[F]])
 ```
 
 So we just wrap an `F[_]` in this case class. `Fix[F] => F[Fix[F]]` can be defined as simply `fix => fix.unfix`.
@@ -272,7 +364,10 @@ So we just wrap an `F[_]` in this case class. `Fix[F] => F[Fix[F]]` can be defin
 ## Catamorphism: second attempt
 Now we can define the catamorphism on a fixed-point type of a structure `F` as follows:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C2Generalisation.scala" snippet="CataRight"}
+```scala
+// Catamorphism
+def cata[F[_]: Functor, A](structure: Fix[F])(algebra: F[A] => A): A =
+  algebra(structure.unfix.map(cata(_)(algebra)))
 ```
 
 ## Examples using `cata`
@@ -410,7 +505,55 @@ import matryoshka.implicits._  // Syntax
 
 And here is the code for the examples:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C3Matryoshka.scala" snippet="Examples"}
+```scala
+// Nat to Int
+def natToInt[T](n: T)(implicit T: Recursive.Aux[T, Nat]): Int = n.cata[Int] {
+  case Succ(x) => 1 + x
+  case Zero    => 0
+}
+def nat[T](implicit T: Corecursive.Aux[T, Nat]): T =
+  Succ(
+    Succ(
+      Succ(
+        Zero.embed
+      ).embed
+    ).embed
+  ).embed
+val natRes = natToInt(nat[Fix[Nat]])
+println(natRes)  // 3
+
+// Sum a list of ints
+def sumList[T](l: T)(implicit T: Recursive.Aux[T, IntList]): Int = l.cata[Int] {
+  case Cons(head, tail) => head + tail
+  case Empty            => 0
+}
+def lst[T](implicit T: Corecursive.Aux[T, IntList]): T =
+  Cons(1,
+    Cons(2,
+      Cons(3,
+        Empty.embed
+      ).embed
+    ).embed
+  ).embed
+val listRes = sumList(lst[Fix[IntList]])
+println(listRes)  // 6
+
+// Evaluate an expression
+def eval[T](e: T)(implicit T: Recursive.Aux[T, Expr]): Int = e.cata[Int] {
+  case Add (x1, x2) => x1 + x2
+  case Mult(x1, x2) => x1 * x2
+  case Num (x)      => x
+}
+def expr[T](implicit T: Corecursive.Aux[T, Expr]): T =
+  Add(
+    Mult(
+      Num(2).embed,
+      Num(3).embed
+    ).embed,
+    Num(3).embed
+  ).embed
+val exprRes = eval(expr[Fix[Expr]])
+println(exprRes)  // 9
 ```
 
 Main differences from our [ad-hoc solution](#examples-using-cata):
