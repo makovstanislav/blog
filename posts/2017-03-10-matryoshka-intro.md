@@ -376,7 +376,55 @@ def cata[F[_]: Functor, A](structure: Fix[F])(algebra: F[A] => A): A =
 ## Examples using `cata`
 Now we can use the new `cata` to define our examples:
 
-```{.scala include="code/matryoshka-intro/src/main/scala/matryoshkaintro/C2Generalisation.scala" snippet="Examples"}
+```scala
+// Nat to Int
+def natToInt(n: Fix[Nat]): Int = cata[Nat, Int](n) {
+  case Succ(x) => 1 + x
+  case Zero    => 0
+}
+val nat: Fix[Nat] =
+  Fix(Succ(  // 3
+    Fix(Succ(  // 2
+      Fix(Succ(  // 1
+        Fix[Nat](Zero)  // 0
+      ))
+    ))
+  ))
+val natRes = natToInt(nat)
+println(natRes)  // 3
+
+// Sum a list of ints
+def sumList(l: Fix[IntList]): Int = cata[IntList, Int](l) {
+  case Cons(head, tail) => head + tail
+  case Empty            => 0
+}
+val lst: Fix[IntList] =
+  Fix(Cons(1,
+    Fix(Cons(2,
+      Fix(Cons(3,
+        Fix[IntList](Empty)
+      ))
+    ))
+  ))
+val listRes = sumList(lst)
+println(listRes)  // 6
+
+// Evaluate an expression
+def eval(e: Fix[Expr]): Int = cata[Expr, Int](e) {
+  case Add (x1, x2) => x1 + x2
+  case Mult(x1, x2) => x1 * x2
+  case Num (x)      => x
+}
+val expr: Fix[Expr] =
+  Fix(Add(
+    Fix(Mult(
+      Fix[Expr](Num(2)),
+      Fix[Expr](Num(3))
+    )),
+    Fix[Expr](Num(3))
+  ))
+val exprRes = eval(expr)
+println(exprRes)  // 9
 ```
 
 First thing that catches the eye, probably, is how we need to embed every layer of the recursive structures into `Fix`. This is cumbersome, but fine as for the proof of concept.
