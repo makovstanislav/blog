@@ -18,12 +18,12 @@ const PostTemplate = ({ data }) => {
     <Layout>
       <Seo title={post.frontmatter.title} description={post.frontmatter.description} article="true" />
       <div class="content p-3">
-        <div class="level">
+        <div class="level is-mobile">
           <div class="level-left">
-            <div class="level-item has-text-grey-light">{post.fields.date}</div>
+            <p class="level-item has-text-grey-light">{post.fields.date}</p>
           </div>
           <div class="level-right">
-            <div class="level-item"><Link to="/">🏠</Link></div>
+            <p class="level-item"><Link to="/">🏠</Link></p>
           </div>
         </div>
 
