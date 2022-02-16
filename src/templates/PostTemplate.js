@@ -30,7 +30,7 @@ const PostTemplate = ({ data }) => {
         <h1><b>{post.frontmatter.title}</b></h1>
         <article dangerouslySetInnerHTML={{__html: post.html}}/>
 
-        <div class="box mt-3 has-background-warning-light">
+        <div class="box mt-3 has-background-info-light">
           <div class="level">
             <div class="level-item">
               <div class="s9-widget-wrapper" />
