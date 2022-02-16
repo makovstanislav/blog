@@ -1,5 +1,6 @@
 import * as React from "react"
 import { StaticImage } from "gatsby-plugin-image"
+import { Link } from "gatsby"
 
 
 const Sidebar = () => {return (
@@ -7,7 +8,9 @@ const Sidebar = () => {return (
     <div class="has-text-centered">
       <h1>👋 Hi.</h1>
       <figure class="image">
-        <StaticImage src="../images/avatar.jpg" class="is-rounded" alt="avatar" />
+        <Link to="/">
+          <StaticImage src="../images/avatar.jpg" class="is-rounded" alt="avatar" />
+        </Link>
       </figure>
       <h2>I'm <a href="/">Anatolii</a>.</h2>
     </div>
