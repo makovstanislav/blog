@@ -27,6 +27,7 @@
     "gatsby-plugin-sitemap": "^5.7.0",
     "gatsby-remark-autolink-headers": "^5.7.0",
     "gatsby-remark-graphviz": "^4.7.0",
+    "gatsby-remark-plantuml-lite": "^0.1.2",
     "gatsby-remark-prismjs": "^6.7.0",
     "gatsby-remark-table-of-contents": "^2.0.0",
     "gatsby-source-filesystem": "^4.7.0",

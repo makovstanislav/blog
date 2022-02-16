@@ -29,7 +29,7 @@ Here is how an implementation of natural numbers might look like:
 
 And here is a visualization of the number 3 represented this way:
 
-```{.graphviz width=100% #nat_diagram}
+```dot
 digraph G { label=" Structure " rankdir=LR
   S3 [label=" Succ "]
 
@@ -66,7 +66,7 @@ A list is either an empty list or a recursive structure that has a `head` elemen
 
 Here is how a list of `1, 2, 3` looks like:
 
-```{.graphviz #list_diagram}
+```dot
 digraph G { label=" Structure " rankdir=TB newrank=true
 
   N3 [label=" Cons "]
@@ -106,7 +106,7 @@ We have two node types for the summation and the multiplication, and one leaf ty
 
 Here is how an expression `2 * 3 + 3` looks like:
 
-```{.graphviz #expr_diagram}
+```dot
 digraph G { label=" Structure " rankdir=TB newrank=true
   Add
 
@@ -151,7 +151,7 @@ A better way to look at it is as if we were replacing the substructures by their
 
 For example, when evaluating a `Nat` depicted by [the diagram above](#nat_diagram), the next step of its evaluation would look as follows:
 
-```graphviz
+```dot
 digraph G { label=" Structure " rankdir=LR
   S3 [label=" Succ "]
 
@@ -167,7 +167,7 @@ Effectively, we have `Succ(previous = 2)`, which is then collapsed into `1 + 2` 
 
 Similarly, the next step for the `IntList` [depicted](#list_diagram) above will be:
 
-```graphviz
+```dot
 digraph G { label=" Structure " rankdir=TB newrank=true
 
   N3 [label=" Cons "]
@@ -189,7 +189,7 @@ This is effectively a `Cons[Int](head = 1, tail = 5)` (again, notice how we intr
 Finally, for the `Expr` [above](#expr_diagram), the next step is to evaluate both of its two substructures:
 
 
-```graphviz
+```dot
 digraph G { label=" Structure " rankdir=TB newrank=true
   Add
 
@@ -291,7 +291,7 @@ Also, notice how we have gotten rid of the recursive calls in all of our example
 Catamorphisms are not the only recursion scheme out there. Many more exist. And, of course, you do not need to implement them from scratch. [Matryoshka](https://github.com/slamdata/matryoshka) is a library that specializes on implementing recursion schemes on fixed-point types of  recursive structures.
 
 ## Recursion scheme mechanics
-```{.plantuml width=100%}
+```plantuml
 "Based[T]" <|-- "Recursive[T]"  : extends
 "Based[T]" <|-- "Corecursive[T]": extends
 
@@ -347,7 +347,7 @@ The `Based[T]` type class captures the idea that a type `T` must "know" the type
 
 The fact that you can extract `F[T]` from `T` is a necessary condition for the recursion schemes defined in the `Recursive[T]` type class. They have one thing in common: they all tear down a recursive structure. Here is an intuition for this:
 
-```graphviz
+```dot
 digraph G { rankdir=TB newrank=true
 
   subgraph cluster1 { label="Before 'project'" graph[style=solid]
@@ -375,7 +375,7 @@ It follows from the name that `Corecursive` is a dual of `Recursive` - hence, it
 
 Indeed, it mirrors `Recursive` in a sense that it also has a single abstract method and a bunch of recursion schemes based on it. This method is `embed` and is roughly `Base[T] => T`. If `project` takes the information out of the structure and hence is good for evaluating them via algebras, `embed` places the information into the structure, hence building it up:
 
-```graphviz
+```dot
 digraph G { rankdir=TB newrank=true
   FT[label="F[T]"]
 

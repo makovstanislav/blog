@@ -14,11 +14,13 @@ module.exports = {
     "gatsby-plugin-sharp",
     "gatsby-plugin-sass",
     "gatsby-transformer-sharp",
+
     {
       resolve: "gatsby-transformer-remark",
       options: {
         plugins: [
           `gatsby-remark-graphviz`,
+          `gatsby-remark-plantuml-lite`,
           {
             resolve: `gatsby-remark-table-of-contents`,
             options: {

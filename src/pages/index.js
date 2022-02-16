@@ -13,7 +13,7 @@ const IndexPage = ({ data }) =>
         {
           data.allMarkdownRemark.nodes.map(post => {
             return(
-              <li><span>{post.fields.date} &raquo;</span> <Link to={`/posts/${post.fields.slug}`}>{post.frontmatter.title}</Link></li>
+              <li><span class="is-family-monospace">{post.fields.date} &raquo;</span> <Link to={`/posts/${post.fields.slug}`}>{post.frontmatter.title}</Link></li>
             )
           })
         }
