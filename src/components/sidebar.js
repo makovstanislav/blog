@@ -5,7 +5,7 @@ import { Link } from "gatsby"
 
 const Sidebar = () => {return (
   <div class="content">
-    <div class="has-text-centered">
+    <div class="has-text-centered mb-4">
       <h1>👋 Hi.</h1>
       <figure class="image">
         <Link to="/">
@@ -13,6 +13,16 @@ const Sidebar = () => {return (
         </Link>
       </figure>
       <h2>I'm <a href="/">Anatolii</a>.</h2>
+      <div class="level">
+        <div class="level-item">
+          <a href="https://github.com/anatoliykmetyuk" target="_blank" class="mr-2">
+            <i class="fa-brands fa-github-square fa-2xl"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/akmetiuk/" target="_blank" class="">
+            <i class="fa-brands fa-linkedin fa-2xl"></i>
+          </a>
+        </div>
+      </div>
     </div>
     <div>
       <p>💻I'm a compiler engineer at LAMP/EPFL, working on Scala 3.</p>

@@ -14,6 +14,7 @@ module.exports = {
     "gatsby-plugin-sharp",
     "gatsby-plugin-sass",
     "gatsby-transformer-sharp",
+    "gatsby-plugin-fontawesome-css",
 
     {
       resolve: "gatsby-transformer-remark",
