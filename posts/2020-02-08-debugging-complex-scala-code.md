@@ -1,5 +1,5 @@
 ---
-title: Debugging Complex Scala Code&#58; Tried and True Approaches
+title: "Debugging Complex Scala Code: Tried and True Approaches"
 description: The tools and approaches I've been using for months that save me a lot of time when debugging the Dotty codebase.
 ---
 ```toc
