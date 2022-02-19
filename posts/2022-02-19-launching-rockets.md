@@ -89,7 +89,7 @@ Armed with this theory, let’s build a rocket and program it to reach space. An
 
 The rocket has two stages: the first one will bring us out of the atmosphere and the second one will be used in space to reach orbit.
 
-You can see the full program for this rocket [on github](https://github.com/anatoliykmetyuk/simple-rockets-compiler/blob/119b9e0d480a0f363ca66892df7a9681297ca58d/examples/FlightToOrbit.sc). Keep in mind that the in-game planet is not Earth and hence the parameters used below are not realistic for a real-Earth flight plan. E.g. the end of the orbit for Droo (the game’s analogue of Earth) is 60km while for earth it is 100km. The orbital speed for Droo is around 3420m/s while for Earth it is around 7900/s.
+You can see the full program for this rocket [on github](https://github.com/anatoliykmetyuk/simple-rockets-compiler/blob/119b9e0d480a0f363ca66892df7a9681297ca58d/examples/FlightToOrbit.sc). Keep in mind that the in-game planet is not Earth and hence the parameters used below are not realistic for a real-Earth flight plan. E.g. the end of the atmosphere for Droo (the game’s analogue of Earth) is 60km while for earth it is 100km. The orbital speed for Droo is around 3420m/s while for Earth it is around 7900/s.
 
 The parameters used in such kind of programs are very much experimentation-based. You try one set of parameters, it doesn’t work, you tweak until it works (hopefully real-world rocket scientists are more meticulous than that :) ).
 
