@@ -185,6 +185,10 @@ end ascentProfile
 
 Notice that for the control structures, most of the times the built-in game loops are used such as `whileLoop` and `ifTrue`. For the boolean inequality comparison, `=!=` is used instead of `!=`.
 
+Here's a footage of how a rocket flies under this program:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dQLlwcb0zaY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 # Continuing the Journey
 
 <a href="/post_assets/2022-02-19-launching-rockets/CleanShot%202022-02-19%20at%2013.48.08@2x.png" target="_blank"><img src="/post_assets/2022-02-19-launching-rockets/CleanShot%202022-02-19%20at%2013.48.08@2x.png" width="50%"/></a>
