@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `Anatolii's Programming Blog`,
-    siteUrl: `https://www.yourdomain.tld`,
+    siteUrl: `https://www.akmetiuk.com`,
     titleTemplate: "%s · Anatolii's Programming Blog",
     description:
       "I'm Anatolii, Scala programmer, Compiler Engineer at LAMP/EPFL supporting the Scala 3 effort.",

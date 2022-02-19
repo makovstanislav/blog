@@ -1,6 +1,7 @@
 ---
 title: Launching Rockets with Scala
 description: In this article, we'll see how you can script a game about rockets in Scala
+image: /post_assets/2022-02-19-launching-rockets/simplerockets-2-e1631817494638.jpg
 ---
 
 If you’re an aerospace hobbyist, there’s a good chance that you’ll have a ton of fun with [Simple Rockets 2](https://www.simplerockets.com/).
