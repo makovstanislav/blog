@@ -16,7 +16,7 @@ const PostTemplate = ({ data }) => {
 
   return(
     <Layout>
-      <Seo title={post.frontmatter.title} description={post.frontmatter.description} article="true" />
+      <Seo title={post.frontmatter.title} description={post.frontmatter.description} article="true" image={post.frontmatter.image} />
       <div class="content p-3">
         <div class="level is-mobile">
           <div class="level-left">
@@ -73,6 +73,7 @@ export const query = graphql`
       frontmatter {
         title
         description
+        image
       }
       fields {
         date(formatString: "MMM DD, YYYY")
