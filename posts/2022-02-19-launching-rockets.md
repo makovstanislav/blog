@@ -58,11 +58,13 @@ However, if you get your speed of movement in parallel with the planet (i.e. hor
 
 # The Flight Plan
 A trajectory from take-off to orbit looks something like this:
+
 <a href="/post_assets/2022-02-19-launching-rockets/574C143A-13DC-4533-8E71-C644A87C691C.jpeg" target="_blank"><img src="/post_assets/2022-02-19-launching-rockets/574C143A-13DC-4533-8E71-C644A87C691C.jpeg" width="50%"/></a>
 
 First, the rocket flies straight up as fast as possible – trying to escape the lower dense atmosphere which causes a lot of drag and therefore is hard to fly through. Once it is high enough, it starts to slowly turn to the side to build the horizontal speed.
 
 During the first stage of the flight, the rocket is not trying to reach orbit just yet. The objective is merely to escape the atmosphere. And so the most important thing about the trajectory is its highest point above the planet surface:
+
 <a href="/post_assets/2022-02-19-launching-rockets/3C9D58A6-43C8-4E36-855B-CD4574E4C183.jpeg" target="_blank"><img src="/post_assets/2022-02-19-launching-rockets/3C9D58A6-43C8-4E36-855B-CD4574E4C183.jpeg" width="50%"/></a>
 
 This point is called *Apoapsis*. When trying to reach orbit, you want this point above your planet’s atmosphere. If any point of your orbit intersects the atmosphere, the spacecraft will be losing speed due to drag until it is unable to maintain orbit.
@@ -112,6 +114,7 @@ For the `gradualTurn`, the idea is that upon reaching an altitude of 500 meters,
 “Coasting” means “wait until the apoapsis reaches the target value, shut down the engine and fly by inertia until the rocket reaches the apoapsis” – very much like a shell shot from an artillery gun.
 
 “Periapsis rise manoeuvre” means “turn on the engines again and accelerate to the side until the orbital speed is reached”. The extra parameters are responsible for the technical detail of making sure this engine burn doesn’t make our orbit too lopsided, like this (try it for yourself to get a feel of why this is needed!):
+
 <a href="/post_assets/2022-02-19-launching-rockets/7318FA49-2DD7-4C51-BAA2-B195B2DF1862.jpeg" target="_blank"><img src="/post_assets/2022-02-19-launching-rockets/7318FA49-2DD7-4C51-BAA2-B195B2DF1862.jpeg" width="50%"/></a>
 
 ## Show me the code
@@ -178,6 +181,7 @@ end ascentProfile
 Notice that for the control structures, most of the times the built-in game loops are used such as `whileLoop` and `ifTrue`. For the boolean inequality comparison, `=!=` is used instead of `!=`.
 
 # Continuing the Journey
+
 <a href="/post_assets/2022-02-19-launching-rockets/CleanShot%202022-02-19%20at%2013.48.08@2x.png" target="_blank"><img src="/post_assets/2022-02-19-launching-rockets/CleanShot%202022-02-19%20at%2013.48.08@2x.png" width="50%"/></a>
 
 There are 20 planets in game to explore, some with really weird trajectories. Can you visit them all? Would it simplify things if you build a space station first, across multiple launches, to store fuel in orbit and refuel there with your spacecrafts before going on deep space missions? How would you do it, what kind of physics do you need to discover to make it happen?
