@@ -22,17 +22,20 @@ import $dep.`com.akmetiuk::simple-rockets-compiler:0.1.1`, rocketscompiler.{ *, 
 program("Simple Launch") {
   // Countdown
   for i <- 5 to 1 by -1 do
-    displayText(i)
+    displayText(s"T-$i")
     waitSeconds(1)
   displayText("LAUNCH")
 
   // Launch sequence
   activateStage() // Start the engine
-  Throttle := 1  // Set engine power to 100%
+  Throttle := 1   // Set engine power to 100%
+  Pitch := 30     // Tilt the rocket so that it is 30 degrees to the surface
+  Heading := 180  // Fly south
 }
 ```
 
-The above sequence compiles to the following Vizzy code:
+The above sequence compiles to the following Vizzy code that you can load into your rocket following the [usage instructions](https://github.com/anatoliykmetyuk/simple-rockets-compiler/blob/119b9e0d480a0f363ca66892df7a9681297ca58d/README.md#usage):
+
 <a href="/post_assets/2022-02-19-launching-rockets/CleanShot%202022-02-19%20at%2013.15.16@2x.png" target="_blank"><img src="/post_assets/2022-02-19-launching-rockets/CleanShot%202022-02-19%20at%2013.15.16@2x.png" width="50%"/></a>
 
 With that, we have all the programming tools needed to plan our voyage to the orbit.
