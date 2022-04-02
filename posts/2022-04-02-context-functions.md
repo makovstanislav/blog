@@ -18,8 +18,8 @@ Pitch := 25  // Tilt the rocket 25 degrees to the horizon
 
 The process of getting this code on board a SR2 rocket goes as follows:
 
-1. The Scala code is compiled
-2. The compiled program is executed by the JVM. The job of this program is to translate the instructions `activateStage()`, `Throttle := 1` and `Pitch := 25` into equivalent instructions in the game's built-in programming language and write them as a program into the game's directory.
+1. The Scala code is compiled.
+2. The compiled program is executed by the JVM. The job of this program is to translate the instructions `activateStage()`, `Throttle := 1` and `Pitch := 25` into equivalent instructions in the game's built-in programming language and write them as an in-game program into the game's directory.
 3. In the game, the player loads the program into their desired spacecraft.
 4. The player starts the flight simulation with the spacecraft in question, and the program loaded into the spacecraft is executed.
 
@@ -50,7 +50,7 @@ import collection.mutable.ListBuffer
 def activateStage()(using lst: ListBuffer[Instruction]): Unit = ???
 ```
 
-When we call `activateStage()`, the `lst` parameter is inferred from the contextual scope. However, the list must still be created somewhere and placed on that contextual scope. This logic also has nothing to do with the business logic of the DSL, so we want to abstract it away from the user. So, we can define a function `program` that provides the DSL instructions with the list. The same function can also take care of t:
+When we call `activateStage()`, the `lst` parameter is inferred from the contextual scope. However, the list must still be created somewhere and placed on that contextual scope. This logic also has nothing to do with the business logic of the DSL, so we want to abstract it away from the user. So, we can define a function `program` that provides the list to the DSL instructions. The same function can also take care of outputting the instructions to the game directory:
 
 ```scala
 // Defined by the library
@@ -72,7 +72,7 @@ program("Hello Simple Rockets 2") { lst =>
 Thus, the user doesn't need to handle the list creation. But they still need to take care of [putting it on the contextual scope](https://docs.scala-lang.org/scala3/reference/contextual/givens.html#inner-main) via `given ListBuffer[Instruction] = lst` – something we need to get rid of.
 
 # Context Functions
-A [context function](https://docs.scala-lang.org/scala3/reference/contextual/context-functions.html) is to an ordinary function what a method with context parameters is to a method with ordinary parameters:
+A [context function](https://docs.scala-lang.org/scala3/reference/contextual/context-functions.html) is to an ordinary function what a method with contextual parameters is to a method with ordinary parameters:
 
 ```scala
 def f(x: Int): Int = x * x
@@ -101,7 +101,7 @@ program("Hello Simple Rockets 2") {
 }
 ```
 
-With that, we've spared the user from the trouble of writing anything that is not related to the business logic of flying a rocket.
+With that, we've spared the user the trouble of writing anything that is not related to the business logic.
 
 # Everything is a Context Function!
 At least in our DSL implementation. Remember the signature of instructions like `activateStage()`?
@@ -110,13 +110,13 @@ At least in our DSL implementation. Remember the signature of instructions like 
 def activateStage()(using lst: ListBuffer[Instruction]): Unit = ???
 ```
 
-Since methods with context parameters can be rewritten to context functions, we can rewrite the above definition as follows:
+Since methods with contextual parameters can be rewritten to context functions, we can rewrite the above definition as follows:
 
 ```scala
 def activateStage(): ListBuffer[Instruction] ?=> Unit = ???
 ```
 
-`activateStage`, hence, is an ordinary function that returns a context function. That context function, in presence of a context parameter of type `ListBuffer[Instruction]`, writes `ActivateStage` AST node to that list.
+`activateStage`, hence, is an ordinary function that returns a context function. That context function, in presence of a contextual parameter of type `ListBuffer[Instruction]`, writes `ActivateStage` AST node to that list.
 
 It is the second time that we see `ListBuffer[Instruction] ?=> Unit` type in the DSL implementation – the first one being in the `program` definition. From the DSL user's perspective, methods and values of this type contain programs meant for the game's runtime. To improve user experience, let's give this type a name and rewrite our definitions:
 
@@ -127,10 +127,10 @@ def program(name: String)(body: SRProgram): Unit = ???
 def activateStage(): SRProgram = ???
 ```
 
-This type can also be used to modularise our DSL program. Consider, for example, that we have a large set of instructions for the `program`, and we want to modularise it into methods. If you put several instructions into a Scala method, the compiler will (understandably) complain that it can't find the context parameter for `ListBuffer[Instruction]`:
+This type can also be used to modularise our DSL program. Consider, for example, that we have a large set of instructions for the `program`, and we want to modularise it into methods. If you put several instructions into a Scala method, the compiler will (understandably) complain that it can't find the contextual parameter for `ListBuffer[Instruction]`:
 
 ```scala
-// DOES NOT COMPILE: CANNOT FIND CONTEXT PARAMETER FOR ListBuffer[Instruction]
+// DOES NOT COMPILE: CANNOT FIND CONTEXTUAL PARAMETER FOR ListBuffer[Instruction]
 
 def liftOff() =
   activateStage()
@@ -148,7 +148,7 @@ program("Hello") {
 }
 ```
 
-However, if we type a method as `SRProgram`, the compiler understands that the context parameter is expected at the call site (not the definition site), and the error goes away:
+However, if we type a method as `SRProgram`, the compiler understands that the contextual parameter is expected at the call site (not the definition site), and the error goes away:
 
 ```scala
 def liftOff(): SRProgram =
@@ -168,7 +168,7 @@ program("Hello") {
 ```
 
 # Relationship with Baguettes
-Those of you familiar with functional programming would probably recognise the monadic state pattern. In popular functional libraries there is a type class called `State` the gist of which is to abstract away mutable state from the business logic.
+Those of you familiar with functional programming would recognise the monadic state pattern. In popular functional libraries there is a type class called `State` the gist of which is to abstract away mutable state from the business logic.
 
 In a thought experiment where we use `State`, the DSL program would have had to be rewritten with `for` comprehension, as follows:
 
@@ -185,9 +185,9 @@ The usage of `for` necessarily follows the fundamental behind all the monads: th
 # Summary
 When designing DSLs, there is often a need to express a sequence of operations. It is best expressed using a sequence of statements of the host language. Sometimes we, however, do not want to execute those statements immediately but to collect them for further processing. To achieve this, we can represent them as ASTs. We, however, want to hide the mutable AST builder (e.g. a list) from the DSL since it's a technical detail and is not a part of the business logic.
 
-This is where the notion of a context function comes handy, defined using`A ?=> B`syntax. While defining it, one can omit its parameters while defining only its body. All of the function parameters are context parameters and are accessible from the body.
+This is where the notion of a context function comes handy, defined using `A ?=> B` syntax. While defining it, one can omit its parameters and specify only its body. All of the function parameters are contextual parameters and are accessible from the body.
 
-So, one can define the `type Program = ListBuilder[Instruction] ?=> Unit` type and use it to represent all the DSL's statements and programs. A Scala `def` typed as `Program` represents a set of DSL instructions and is callable as a DSL instruction itself.
+So, one can define a `type Program = ListBuilder[Instruction] ?=> Unit` type and use it to represent all the DSL's statements and programs. A Scala `def` typed as `Program` represents a set of DSL instructions and is callable as a DSL instruction itself.
 
 If you're interested in exploring this architecture more, you are welcome to read the codebase of the [Simple Rockets 2 compiler](https://github.com/anatoliykmetyuk/simple-rockets-compiler).
 
