@@ -18,8 +18,11 @@ const Sidebar = () => {return (
           <a href="https://github.com/anatoliykmetyuk" target="_blank" rel="noreferrer" class="mr-2">
             <i class="fa-brands fa-github-square fa-2xl"></i>
           </a>
-          <a href="https://www.linkedin.com/in/akmetiuk/" target="_blank" rel="noreferrer" class="">
+          <a href="https://www.linkedin.com/in/akmetiuk/" target="_blank" rel="noreferrer" class="mr-2">
             <i class="fa-brands fa-linkedin fa-2xl"></i>
+          </a>
+          <a href="https://twitter.com/akmetiuk" target="_blank" rel="noreferrer" class="">
+            <i class="fa-brands fa-twitter-square fa-2xl"></i>
           </a>
         </div>
       </div>
