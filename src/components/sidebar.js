@@ -12,7 +12,7 @@ const Sidebar = () => {return (
           <StaticImage src="../images/avatar.jpg" class="is-rounded" alt="avatar" />
         </Link>
       </figure>
-      <h2>I'm <a href="/">Anatolii</a>.</h2>
+      <h2>I'm <a href="/">Stan</a>.</h2>
       <div class="level">
         <div class="level-item">
           <a href="https://github.com/anatoliykmetyuk" target="_blank" rel="noreferrer" class="mr-2">
