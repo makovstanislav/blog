@@ -74,3 +74,51 @@ Write
 run
 ```
 See the output. Your first Scala 3 application has been runned successfully.
+
+
+## What I`ve just done?
+
+Lets debrief what we have for now
+
+#### Build structure
+
+
+#### Installed apps
+
+|Application|What is it?|What does it do?|When and how to use it?|Read more|
+|------|-----------|-----------|-----------|-----------|
+|Coursier|Scala artifacts fetcher (or "dependency resolver")|installs applications and fetch other resources allowing Scala program to run| It is used by command line (CLI).|There is no need to open it manually. Sbt launches scalac automatically (under the hood) when you run your Scala program by sbt|
+|sbt ("scala build tool")|build automation tool|*builds Scala project automatically *exploit various apps to run Scala code|There is no need to open it manually. Sbt launches JVM automatically (under the hood) when you run your Scala program by sbt.|
+|scalac|Scala compiler|converts Scala code into Java bytecode (readable by machine)|
+|JVM ("Java Virtual Machine")|virtual machine|executes programs written in Java bytecode (readable by machine)|
+|Adopt Open JDK|Java development kit (it includes JVM, standard java libraries etc)|facilitates creation applications on Java platform|There is no need to open parts of JDK manually. Sbt launches them automatically (under the hood) when you run your Scala program by sbt|
+|scalafmt|Scala code formatter|keeps formatting (indentation, line breaks etc) compatible to conventions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
