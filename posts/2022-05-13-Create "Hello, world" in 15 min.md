@@ -1,40 +1,45 @@
 ---
-title: Creating first Scala 3 application for absolute beginners
+title: Creating first Scala 3 application 
 description: step-by-step explanation of how to build your first Scala 3 application from scratch on macOS.
 image: /images/scala3.png
 ---
 
 
 The article explains how to build minimal Scala 3 application from scratch on macOS. 
-The flow described here is regular and you may go through your own way to familirize yourself with Scala 3.
+The flow described here is regular and you may go through your own way to familirize yourself with Scala 3. The less experienced you are, the more it is recommended to stick to the guide below.
+
+## pre-requisites
+|Coding experience|Operating system|
+|---|---|
+|Absolute beginner|macOS|
 
 <a href="/post_assets/2022-02-19-launching-rockets/7318FA49-2DD7-4C51-BAA2-B195B2DF1862.jpeg" target="_blank"><img src="/post_assets/2022-02-19-launching-rockets/7318FA49-2DD7-4C51-BAA2-B195B2DF1862.jpeg" width="50%"/></a>
-
-![Tux, the macOS mascot](/static/post_assets/2022-02-19-launching-rockets/3C9D58A6-43C8-4E36-855B-CD4574E4C183.jpeg)
 
 ## Step 1: Install development software 
 
 #### Code editor
-Download **[VS Code](https://code.visualstudio.com)**.
+Install **[VS Code](https://code.visualstudio.com)**. You may choose another editor: Sublime Text, Vim or Emacs. Each of them is lightweight and beloved by coders. This article is tailored to the interaction with VS Code.
 
 
 #### Extention for the  editor 
-Download **[Metals](https://marketplace.visualstudio.com/items?itemName=scalameta.metals)**.
+Install **[Metals](https://marketplace.visualstudio.com/items?itemName=scalameta.metals)**.
+This is the plugin (extension) for code editors designed for Scala developers. It enriches the editor with knowledge how to deal with Scala 3 files. Its job is enhancing your development experience. For instance, highlighting syntax errors before you run the code, autocompletion (kind of T9 for coders) and many more. If you do not install this extension, you still be able to write Scala applications but the text editor won`t know how to assist you.
 
 #### Development environment
 
+Lets install a package of applications and resources allowing any Scala program to run. You can do it just by writing the following command in Terminal. 
 
 ```
 curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-apple-darwin.gz | gzip -d > cs && chmod +x cs && (xattr -d com.apple.quarantine cs || true) && ./cs setup
 ```
-Check if the installation has been successful. Write in the command line
-```
-scala -version
-```
-shall output
+If you are looking for other ways to setup Scala development environment, e.g. using Brew, see the [installer documentation](https://get-coursier.io/docs/cli-installation) for more. 
+
+Lets check if the installation has been successful. Type scala -version in Terminal. Once it outputs the following, everything is fine
 ```
 Scala code runner version 3.1.2 -- Copyright 2002-2022, LAMP/EPFL
 ```
+
+Congrats! 🥳 One of the coolest programming language is ready for using on your computer.
 #### 
 
 ## Step 2: Create "build"
