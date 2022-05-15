@@ -28,7 +28,7 @@ const Sidebar = () => {return (
       </div>
     </div>
     <div>
-      <p>💻 I'm a business analyst at fintech startup, who contributes to Scala community in his spare time </p>
+      <p>💻 I am a business analyst at UK fintech startup with Ukrainian roots. In my spare time I contribute to Scala community. </p>
     </div>
   </div>
 )}

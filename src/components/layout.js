@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
         </div>
       </main>
       <footer class="footer content has-text-centered">
-        <p>© Anatolii Kmetiuk, 2016 - 2022</p>
+        <p>© Makov Stanislav, 2022</p>
       </footer>
     </>
   )
