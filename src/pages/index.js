@@ -10,7 +10,7 @@ const IndexPage = ({ data }) =>
   <Layout>
     <Seo />
     <div>
-      <h1 class="title">📝 Scala 3 for beginners</h1>
+      <h1 class="title">📝 How to use Scala 3</h1>
       <ul id="blog-posts" class="posts">
         {
           data.allMarkdownRemark.nodes.map(post => {

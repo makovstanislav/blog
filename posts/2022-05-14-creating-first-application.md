@@ -5,7 +5,6 @@ image: /post_assets/2022-05-14-creating-first-application/desk.jpeg
 featuredImage: /post_assets/2022-05-14-creating-first-application/desk.jpeg
 ---
 
-![Desk!](/post_assets/2022-05-14-creating-first-application/desk.jpeg "San Juan Mountains")
 
 <a href="/post_assets/2022-02-19-launching-rockets/simplerockets-2-e1631817494638.jpg" target="_blank"><img src="/post_assets/2022-02-19-launching-rockets/simplerockets-2-e1631817494638.jpg" width="50%"/></a>
 
