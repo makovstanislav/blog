@@ -3,7 +3,7 @@ title: Executing the code
 description: This articles explains sequence of program execution
 image: /images/scala3.png
 ---
-This article covers simplified sequence of program execution.
+This article covers simplified sequence of program execution. **...in progress**
 
 Lets break down what happens when launch hello, world 
 

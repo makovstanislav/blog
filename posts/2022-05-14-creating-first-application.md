@@ -1,15 +1,7 @@
 ---
 title: Creating first application 
 description: step-by-step explanation of how to build your first Scala 3 application from scratch on macOS
-image: /post_assets/2022-05-14-creating-first-application/desk.jpeg
-featuredImage: /post_assets/2022-05-14-creating-first-application/desk.jpeg
 ---
-
-
-<a href="/post_assets/2022-02-19-launching-rockets/simplerockets-2-e1631817494638.jpg" target="_blank"><img src="/post_assets/2022-02-19-launching-rockets/simplerockets-2-e1631817494638.jpg" width="50%"/></a>
-
-<a href="/post_assets/2022-05-14-creating-first-application/desk.jpeg" target="_blank"><img src="/post_assets/2022-05-14-creating-first-application/desk.jpeg" width="50%"/></a>
-
 The article explains how to build "Hello, world" application in Scala 3. 
 
 **Pre-requisites**
