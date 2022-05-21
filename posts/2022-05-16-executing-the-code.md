@@ -7,9 +7,9 @@ This article covers simplified sequence of program execution. **...in progress**
 
 Lets break down what happens when launch hello, world 
 
-0. Start stb and type ```run``
+0. Start stb and type ```run```
 1. Terminal laucnhes Sbt
-2. Sbt uses Scalac to compile Scala code you wrote into Java Bytecode. In our case, compiler - is a program that converts Scala code (that you write in an editor) to Java Bytecode. Java bytecode are compiled Java sources that can be directly processed or executed by a Java virtual machine. 
+2. Sbt uses Scalac to compile the code you wrote (Scala code) into Java Bytecode. In our case, compiler - is a program that converts Scala code (that you write in an editor) to Java Bytecode. Java bytecode are compiled Java sources that can be directly processed or executed by a Java virtual machine. 
 3. Sbt uses Scala to ___
 4. Scala uses JVM to execute Java Bytecode
 

@@ -7,4 +7,4 @@ image: /images/scala3.png
 
 The article explains how to call API in Scala 3 using Scala and Java libraries
 
-...in progress
+**...in progress**
