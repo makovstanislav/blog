@@ -6,13 +6,13 @@ import { Link } from "gatsby"
 const Sidebar = () => {return (
   <div class="content">
     <div class="has-text-centered mb-4">
-      <h1>👋 Hi.</h1>
+      <h1>Hi 👋 </h1>
       <figure class="image">
         <Link to="/">
           <StaticImage src="../images/avatar.jpg" class="is-rounded" alt="avatar" />
         </Link>
       </figure>
-      <h2>I'm <a href="/">Stan</a>.</h2>
+      <h2>I'm <a href="/">Stan</a></h2>
       <div class="level">
         <div class="level-item">
           <a href="https://www.facebook.com/1806mk/" target="_blank" rel="noreferrer" class="mr-2">
