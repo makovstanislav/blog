@@ -1,10 +1,10 @@
 module.exports = {
   siteMetadata: {
-    title: `Stan's Programming Blog`,
+    title: `Makov | Scala 3`,
     siteUrl: `https://www.akmetiuk.com`,
-    titleTemplate: "%s · Stan's Programming Blog",
+    titleTemplate: "%s",
     description:
-      "I am a business analyst at UK fintech startup with Ukrainian roots. In my spare time I contribute to Scala community.",
+      "Makov Stan`s educational blog about Scala 3. Intended for absolute beginners.",
     url: "https://www.akmetiuk.com", // No trailing slash allowed!
     image: "/images/avatar.jpg", // Path to the image placed in the 'static' folder, in the project's root directory.
     github: "makovstanislav",

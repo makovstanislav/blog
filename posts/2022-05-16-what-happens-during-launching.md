@@ -34,7 +34,7 @@ Currently, there is the program bytecode stored in .class files in a separate fo
 **Output:**
 Hello, world!
 
-As we have seen, sbt takes care of calling the compiler, so we do not need to call it ourselves manually.
+As we have seen, we just need to type ```$sbt run```  in CLI and sbt will take care of the rest.
 
 
 

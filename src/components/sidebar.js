@@ -16,7 +16,7 @@ const Sidebar = () => {return (
       <div class="level">
         <div class="level-item">
           <a href="https://www.facebook.com/1806mk/" target="_blank" rel="noreferrer" class="mr-2">
-            <i class="fa-brands fa-linkedin fa-2xl"></i>
+            <i class="fa-brands fa-facebook fa-2xl"></i>
           </a>
         </div>
       </div>
