@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <Helmet>
-        <title>Anatolii's Programming Blog</title>
+        <title>How to use Scala 3</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       </Helmet>
       <main class="has-background-light">
@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
         </div>
       </main>
       <footer class="footer content has-text-centered">
-        <p>© Anatolii Kmetiuk, 2016 - 2022</p>
+        <p>© Makov Stanislav, 2022. Intended for desktop view</p>
       </footer>
     </>
   )
