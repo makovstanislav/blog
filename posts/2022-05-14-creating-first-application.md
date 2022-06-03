@@ -17,7 +17,7 @@ If you are an experienced developer I`d recommend starting with **[Scala 3 Book]
 
 #### Code editor
 
-Install **[VS Code](https://code.visualstudio.com)**. You may choose another editor: Sublime Text, Vim or Emacs. Each of them is lightweight and beloved by the community. The other excellent way of editing Scala code is using **[IntelliJ IDEA](https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html)**. Still, for immediate immersion in Scala, we stick with VS Code. 
+Install **[VS Code](https://code.visualstudio.com)**. You might choose another editor: Sublime Text, Vim or Emacs. Each of them is lightweight and beloved by the community. The other excellent way of editing Scala code is using **[IntelliJ IDEA](https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html)**. Still, for immediate immersion in Scala, we stick with VS Code. 
 
 
 
@@ -37,11 +37,11 @@ This plugin enriches the editor with an understanding of Scala code. As a result
 
 This command launches the application called Coursier that installs the bundle. As a whole, these apps consist typical Scala development environment. The list of them can be found **[here](https://get-coursier.io/docs/cli-installation)**. If you are looking for other ways to set up Scala development environment, e.g. using Brew, see  [Coursier documentation](https://get-coursier.io/docs/cli-installation). 
 
-Let's check if the installation has been successful. Run ```scala -version``` in Terminal. Once it outputs Scala version and year, everything is fine
+Let's check if the installation has been successful. Run ```scala -version``` in Terminal. Once it outputs Scala version and year, everything is fine:
 ```
 Scala code runner version 3.1.2 -- Copyright 2002-2022, LAMP/EPFL
 ```
-If you do not receive the needed output, please reboot the computer 💻
+If you do not receive similar output, please reboot your computer 💻
 
    <img src="/post_assets/2022-05-14-creating-first-application/scala-version.gif" width="600" height="400">
 
@@ -88,7 +88,7 @@ Perfect 👍
 Your first Scala 3 application has been run successfully.
 
 
-To run your program, you should always start sbt server once (by ```sbt``` command), and then type ```run``` command (for each running). This is because VS Code doesn't know how to handle Scala projects. So it is safe to say that Sbt acts as a coordinator of Scala development environment.
+For running your program, you should always start sbt server once (by ```sbt``` command), and then type ```run``` command (for each running). This is because VS Code doesn't know how to handle Scala projects. So it is safe to say that Sbt acts as a coordinator of Scala development environment.
 
 
 
