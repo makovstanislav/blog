@@ -9,8 +9,7 @@ image: /images/scala3.png
 In essence, the process consists of compilation and execution. In our case, we need to convert Scala code into Java bytecode and execute the result on Java Virtual Machine. 
 
 
-So that not to launch these processes manually, we normally use sbt application which calls different programs by itself. 
-<br>Let's explore what happens once we`ve typed ```$sbt run``` in Terminal.</br>
+So that not to launch these processes manually, we usually use the sbt application, which calls different programs. <br>Let's explore what happens once we`ve typed ```$sbt run``` in Terminal.</br>
 
 
 <img src="/post_assets/2022-05-16-what-happens-during-launching/running-scheme-3.png" width="700" height="400">
@@ -22,8 +21,7 @@ So that not to launch these processes manually, we normally use sbt application 
 
 Source code is stored in .scala files. Now we also have .class files. They are regular Java class files containing Java bytecode to be executed by the Java Virtual Machine (JVM). By default, scalac generates the class files into the current working directory. 
 
-Currently, there is the program bytecode stored in .class files in a separate folder and understandable to the machine. 
-
+Currently, the program bytecode is stored in .class files in a separate folder and understandable to the machine.
 
 ## Step 2: Running
 
