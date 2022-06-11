@@ -1,15 +1,13 @@
 module.exports = {
   siteMetadata: {
     title: `Makov | Scala 3`,
-    siteUrl: `https://www.akmetiuk.com`,
+    siteUrl: `https://www.makovst.com`,
     titleTemplate: "%s",
     description:
-      "Makov Stan`s educational blog about Scala 3. Intended for absolute beginners.",
-    url: "https://www.akmetiuk.com", // No trailing slash allowed!
+      "Educational blog about Scala 3. Intended for absolute beginners.",
+    url: "https://www.makovst.com", // No trailing slash allowed!
     image: "/images/avatar.jpg", // Path to the image placed in the 'static' folder, in the project's root directory.
-    github: "makovstanislav",
     facebook: "1806mk",
-    twitter: "akmetiuk",
   },
   plugins: [
     "gatsby-plugin-react-helmet",
