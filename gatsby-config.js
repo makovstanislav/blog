@@ -6,7 +6,7 @@ module.exports = {
     description:
       "Educational blog about Scala 3. Intended for absolute beginners.",
     url: "https://www.makovst.com", // No trailing slash allowed!
-    image: "/images/avatar.jpg", // Path to the image placed in the 'static' folder, in the project's root directory.
+    image: "/images/preview_pic.jpg", // Path to the image placed in the 'static' folder, in the project's root directory.
     facebook: "1806mk",
   },
   plugins: [
