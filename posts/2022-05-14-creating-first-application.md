@@ -78,8 +78,8 @@ Your first Scala 3 application has run successfully.
 
 For running your program, you should always start sbt server once (by ```sbt``` command), and then type ```run``` command (for each running). This is because VS Code doesn't know how to handle Scala projects. So it is safe to say that Sbt acts as a coordinator of Scala development environment.
 
----
-[^1]: My reference
+
+[^1]: https://docs.scala-lang.org/scala3/getting-started.html
 
 
 
